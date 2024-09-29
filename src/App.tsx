@@ -7,6 +7,7 @@ import { Map } from './pages/Map';
 import { Profile } from './pages/Profile';
 import { setupIonicReact } from '@ionic/react'; // Required to initialize Ionic
 import '@ionic/react/css/core.css'; // Core Ionic CSS
+import 'leaflet/dist/leaflet.css';
 
 setupIonicReact();
 

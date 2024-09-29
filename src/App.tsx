@@ -1,10 +1,12 @@
 import './App.css';
+import { useState, useEffect } from 'react';
 import { IonApp, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonButton } from '@ionic/react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Home } from './pages/Home';
 import { About } from './pages/About';
 import { Map } from './pages/Map';
 import { Profile } from './pages/Profile';
+import { SplashScreen } from './components/SplashScreen';
 import { setupIonicReact } from '@ionic/react'; // Required to initialize Ionic
 import '@ionic/react/css/core.css'; // Core Ionic CSS
 import 'leaflet/dist/leaflet.css';
@@ -12,6 +14,20 @@ import 'leaflet/dist/leaflet.css';
 setupIonicReact();
 
 function App() {
+  const [isLoading, setIsLoading] = useState(true);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false); // Set to false after 2 seconds (simulating data loading)
+    }, 2000); // You can adjust the duration based on real data loading time
+
+    return () => clearTimeout(timer); // Cleanup timeout on unmount
+  }, []);
+
+  if (isLoading) {
+    // Show the SplashScreen while loading
+    return <SplashScreen />;
+  }
+  
   return (
     <IonApp>
       <Router>

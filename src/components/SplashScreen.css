@@ -1,0 +1,17 @@
+.splash-screen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #2e2116;
+    z-index: 9999;
+}
+  
+.splash-screen h1 {
+    font-size: 24px;
+    color: #dfbb72;
+}

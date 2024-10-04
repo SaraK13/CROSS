@@ -14,6 +14,10 @@
     background-color: #694d16;
 }
 
+#refreshButton:hover {
+    background-color: #2f230b;
+}
+
 #issButton {
     position: absolute;
     top: 80px;
@@ -21,4 +25,7 @@
     padding: 10px;
     z-index: 400;
     background-color: #c1860f;
+}
+#issButton:hover {
+    background-color: #2f230b;
 }

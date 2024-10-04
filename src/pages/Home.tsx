@@ -1,5 +1,6 @@
 import { ReactElement, useEffect, useState } from "react";
 import './Home.css';
+import astronautImg from '../assets/nasa-Yj1M5riCKk4-unsplash.jpg';
 
 interface Astronaut {
     name: string;
@@ -35,7 +36,7 @@ export const Home = (): ReactElement => {
     return (<>
         <div className="home-container">
             <h1>Home</h1>
-            <img src="/nasa-Yj1M5riCKk4-unsplash.jpg" alt="astronaut in space" title="astronaut in space"/>
+            <img src={astronautImg} alt="astronaut in space" title="astronaut in space"/>
             <h2>Humans Currently in Space</h2>
             <p className="source">data source: <a href="http://api.open-notify.org/astros.json">http://api.open-notify.org/astros.json</a></p>
 

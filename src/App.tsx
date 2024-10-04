@@ -1,7 +1,7 @@
 import './App.css';
 import { useState, useEffect } from 'react';
 import { IonApp, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonButton } from '@ionic/react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, HashRouter, Routes, Route } from 'react-router-dom';
 import { Home } from './pages/Home';
 import { About } from './pages/About';
 import { Map } from './pages/Map';
@@ -23,10 +23,15 @@ function App() {
     return () => clearTimeout(timer); // Cleanup timeout on unmount
   }, []);
 
+  // Check if running inside Electron
+  const isElectron = !!(window && window.process && window.process.type);
+
   if (isLoading) {
     // Show the SplashScreen while loading
     return <SplashScreen />;
   }
+
+  const Router = isElectron ? HashRouter : BrowserRouter;
   
   return (
     <IonApp>

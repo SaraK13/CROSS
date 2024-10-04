@@ -2,9 +2,13 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 
+// Check if running in Electron (disable PWA in Electron)
+const isElectron = !!(process.env.IS_ELECTRON);
+
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), 
+  plugins: [react(),
+            !isElectron &&
             VitePWA({ 
               registerType: 'autoUpdate',
               includeAssets: ['favicon.ico', 'robots.txt', 'apple-touch-icon.png'],
@@ -43,12 +47,15 @@ export default defineConfig({
               },
               devOptions: {
                 enabled: true
-                /* other options */
               },
-              })],
+              })].filter(Boolean),
   server: {
     watch: {
       usePolling: true,
     }
   },
-})
+  base: './',
+  build: {
+    outDir: 'dist',
+  },
+});

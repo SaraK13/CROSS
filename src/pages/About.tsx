@@ -1,14 +1,43 @@
-import { ReactElement, useState } from "react";
+import { ReactElement, useEffect, useState } from "react";
 import './About.css';
 import { IonButton, IonIcon, IonModal, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonGrid, IonRow } from '@ionic/react';
 import { heart } from 'ionicons/icons';
 import { useLogger } from '../hooks/useLogger';
+
+// fetching version from package.json
+const getVersionFromPackageJson = async () => {
+    const packageJson = await import('../../package.json');
+    return {
+      react: packageJson.dependencies.react,
+      reactDom: packageJson.dependencies['react-dom'],
+      reactRouterDom: packageJson.dependencies['react-router-dom']
+    };
+  };
 
 export const About = (): ReactElement => {
 
     const [showModal, setShowModal] = useState(false); // Modal state
     const [clickCount, setClickCount] = useState(0); // Count for tracking clicks
     const { logs, logInfo } = useLogger(); // Get logs and logging function
+    const [versions, setVersions] = useState<{ react: string; reactDom: string; reactRouterDom: string } | null>(null); // Version state
+
+    // fetch versions from package.json
+    useEffect(() => {
+        const fetchVersions = async () => {
+          const versionsData = await getVersionFromPackageJson();
+          setVersions(versionsData);
+        };
+  
+        fetchVersions();
+    }, []);
+
+    // for debugginh routing
+    useEffect(() => {
+        console.log("About component has been mounted.");
+        return () => {
+            console.log("About component has been unmounted.");
+        };
+    }, []);
 
     // Handle button click to log and show modal
     const handleLogAndShowModal = () => {
@@ -30,9 +59,15 @@ export const About = (): ReactElement => {
             <h1>About</h1>
             <h2>Version from package.json</h2>
             <div className="version-area">
-                <p>react: <b>^18.3.1</b></p>
-                <p>react-dom: <b>^18.3.1</b></p>
-                <p>react-router-dom: <b>^6.26.2</b></p>
+                {versions ? (
+                    <>
+                        <p>react: <b>{versions.react}</b></p>
+                        <p>react-dom: <b>{versions.reactDom}</b></p>
+                        <p>react-router-dom: <b>{versions.reactRouterDom}</b></p>
+                    </>
+                ) : (
+                    <p>Loading versions...</p>
+                )}
             </div>
 
             <div className="developer-area">

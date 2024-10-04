@@ -12,4 +12,13 @@
     padding: 10px;
     z-index: 400;
     background-color: #694d16;
-  }
+}
+
+#issButton {
+    position: absolute;
+    top: 80px;
+    right: 20px;
+    padding: 10px;
+    z-index: 400;
+    background-color: #c1860f;
+}

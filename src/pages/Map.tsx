@@ -45,6 +45,23 @@ function TakeBackButton({ deviceLocation }: { deviceLocation: L.LatLngExpression
     );
 }
 
+function ISSButton({ issLocation }: { issLocation: L.LatLngExpression }) {
+    const map = useMap();
+
+    const handleClick = () => {
+        if (issLocation) {
+            map.setView(issLocation, 3);
+        }
+    };
+
+    return (
+        <button onClick={handleClick} id="issButton">
+            Where is ISS?
+        </button>
+    );
+}
+
+
 // Main Map Component
 export const Map = (): ReactElement => {
     const [deviceLocation, setDeviceLocation] = useState<L.LatLngExpression | null>(null);
@@ -106,19 +123,19 @@ export const Map = (): ReactElement => {
 
                     {/* Marker for the device location */}
                     <Marker position={deviceLocation}>
-                    <Popup>
-                        Device position!
-                    </Popup>
+                        <Popup>
+                            Device position!
+                        </Popup>
                     </Marker>
 
                     <TakeBackButton deviceLocation={deviceLocation} />
+                    {issLocation && <ISSButton issLocation={issLocation} />}
 
-                    {/* Marker for the ISS location */}
-                    {issLocation && (
-                        <Marker position={issLocation}>
-                        <div>ISS Location</div>
-                        </Marker>
-                    )}
+                    <Marker position={issLocation}>
+                        <Popup>
+                            ISS is here now!
+                        </Popup>
+                    </Marker>
 
                     {/* Button to center the map on the device's location */}
                     <CenterMapButton position={deviceLocation} />

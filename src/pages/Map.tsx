@@ -45,12 +45,14 @@ function TakeBackButton({ deviceLocation }: { deviceLocation: L.LatLngExpression
     );
 }
 
-function ISSButton({ issLocation }: { issLocation: L.LatLngExpression }) {
+function ISSButton({ issLocation }: { issLocation: L.LatLngExpression | null  }) {
     const map = useMap();
 
     const handleClick = () => {
         if (issLocation) {
             map.setView(issLocation, 3);
+        } else {
+            console.error("ISS location is not available");
         }
     };
 
@@ -77,7 +79,7 @@ export const Map = (): ReactElement => {
                 setDeviceLocation([latitude, longitude]);
                 setDeviceCoordinates({ latitude, longitude }); // Store raw coordinates
             },
-            (err) => setError('Could not retrieve device location'),{ 
+            () => setError('Could not retrieve device location'),{ 
                 enableHighAccuracy: true 
             }
         );
@@ -129,13 +131,15 @@ export const Map = (): ReactElement => {
                     </Marker>
 
                     <TakeBackButton deviceLocation={deviceLocation} />
-                    {issLocation && <ISSButton issLocation={issLocation} />}
+                    <ISSButton issLocation={issLocation} />
+                    {issLocation && 
 
                     <Marker position={issLocation}>
                         <Popup>
                             ISS is here now!
                         </Popup>
                     </Marker>
+                    }
 
                     {/* Button to center the map on the device's location */}
                     <CenterMapButton position={deviceLocation} />

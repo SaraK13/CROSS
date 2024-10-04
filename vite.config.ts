@@ -49,6 +49,16 @@ export default defineConfig({
   server: {
     watch: {
       usePolling: true,
-    }
+    },
+    proxy: {
+      '/api': {
+        target: 'http://api.open-notify.org',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
+      },
+    },
+    hmr: {
+      timeout: 30000, // Increase timeout
+    },
   },
 })

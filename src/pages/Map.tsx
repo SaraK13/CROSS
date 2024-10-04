@@ -86,23 +86,39 @@ export const Map = (): ReactElement => {
     }, []);
 
     // Fetch ISS location from the Open Notify API
-    useEffect(() => {
-        const fetchIssLocation = async () => {
-        try {
-            const response = await fetch('http://api.open-notify.org/iss-now.json');
+    const fetchISSLocationWithCache = async () => {
+        const cachedData = localStorage.getItem('issLocation');
+        const lastFetched = localStorage.getItem('lastFetched');
+        const now = Date.now();
+      
+        // Fetch new data if cache is older than 1 minute
+        if (!lastFetched || now - parseInt(lastFetched) > 60000) {
+          try {
+            const response = await fetch('/api/iss-now.json');
+            if (response.status === 429) {
+              console.log('Rate limited. Retrying...');
+              setTimeout(fetchISSLocationWithCache, 5000);
+              return;
+            }
             const data = await response.json();
-            const { latitude, longitude } = data.iss_position;
-            setIssLocation([latitude, longitude]);
-            setIssCoordinates({ latitude, longitude });
-        } catch (err) {
-            setError('Failed to retrieve ISS location');
+            localStorage.setItem('issLocation', JSON.stringify(data));
+            localStorage.setItem('lastFetched', now.toString());
+            setIssLocation([data.iss_position.latitude, data.iss_position.longitude]);
+            setIssCoordinates(data.iss_position);
+          } catch (error) {
+            console.error('Error fetching ISS data:', error);
+          }
+        } else {
+             // Return cached data
+            const cachedISSData = JSON.parse(cachedData!);
+            setIssLocation([cachedISSData.iss_position.latitude, cachedISSData.iss_position.longitude]);
+            setIssCoordinates(cachedISSData.iss_position);
         }
-        };
-
-        fetchIssLocation();
+      };
+      
+    useEffect(() => {
+      fetchISSLocationWithCache();
     }, []);
-
-    
 
     return (
         <div className="map-container">

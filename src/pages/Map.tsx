@@ -1,5 +1,5 @@
 import { ReactElement, useEffect, useState } from "react";
-import { MapContainer, TileLayer, Marker, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, useMap, Popup } from 'react-leaflet';
 import L from 'leaflet';
 import './Map.css';
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
@@ -28,6 +28,20 @@ function CenterMapButton({ position }: { position: L.LatLngExpression }) {
       <button className="center-map-button" onClick={handleClick}>
         Jump to Device Location
       </button>
+    );
+}
+
+function TakeBackButton({ deviceLocation }: { deviceLocation: L.LatLngExpression }) {
+    const map = useMap();
+
+    const handleClick = () => {
+        map.setView(deviceLocation, 11); // Adjust zoom level if necessary
+    };
+
+    return (
+        <button onClick={handleClick} id="refreshButton">
+            Take me there!
+        </button>
     );
 }
 
@@ -69,6 +83,8 @@ export const Map = (): ReactElement => {
         fetchIssLocation();
     }, []);
 
+    
+
     return (
         <div className="map-container">
             <h1>Map</h1>
@@ -81,27 +97,31 @@ export const Map = (): ReactElement => {
                     center={deviceLocation}
                     zoom={11}
                     scrollWheelZoom={true}
-                    style={{ height: '400px', width: '60%' }}
-                >
-                <TileLayer
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                />
+                    style={{ height: '400px', width: '60%' }}>
 
-                {/* Marker for the device location */}
-                <Marker position={deviceLocation}>
-                    <div>Device Location</div>
-                </Marker>
+                    <TileLayer
+                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                    />
 
-                {/* Marker for the ISS location */}
-                {issLocation && (
-                    <Marker position={issLocation}>
-                    <div>ISS Location</div>
+                    {/* Marker for the device location */}
+                    <Marker position={deviceLocation}>
+                    <Popup>
+                        Device position!
+                    </Popup>
                     </Marker>
-                )}
 
-                {/* Button to center the map on the device's location */}
-                <CenterMapButton position={deviceLocation} />
+                    <TakeBackButton deviceLocation={deviceLocation} />
+
+                    {/* Marker for the ISS location */}
+                    {issLocation && (
+                        <Marker position={issLocation}>
+                        <div>ISS Location</div>
+                        </Marker>
+                    )}
+
+                    {/* Button to center the map on the device's location */}
+                    <CenterMapButton position={deviceLocation} />
                 </MapContainer>
             )}
 

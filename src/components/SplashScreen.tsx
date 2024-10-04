@@ -1,5 +1,5 @@
 import React from 'react';
-import './SplashScreen.css'; // You'll define the styling for the splash screen here
+import './SplashScreen.css';
 
 export const SplashScreen = () => {
   return (

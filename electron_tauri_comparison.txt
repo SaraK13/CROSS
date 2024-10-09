@@ -1,0 +1,2 @@
+Tauri: It was not difficult to integrate. Only map is not still working properly.
+Electron: It took me to integrate from original Ionic app.

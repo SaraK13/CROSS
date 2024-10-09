@@ -1,92 +1,52 @@
-/**
- * Copyright 2018 Google Inc. All Rights Reserved.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *     http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+# Ionic (+Electron, Tauri) app for Cross Platform Development
+This project is a cross-platform application built with **Ionic**, **Electron**, **Tauri**, and **Vite**.
 
-// If the loader is already loaded, just stop.
-if (!self.define) {
-  let registry = {};
+## Prerequisites
 
-  // Used for `eval` and `importScripts` where we can't get script URL by other means.
-  // In both cases, it's safe to use a global var because those functions are synchronous.
-  let nextDefineUri;
+Make sure you have the following tools installed on your machine before proceeding:
 
-  const singleRequire = (uri, parentUri) => {
-    uri = new URL(uri + ".js", parentUri).href;
-    return registry[uri] || (
-      
-        new Promise(resolve => {
-          if ("document" in self) {
-            const script = document.createElement("script");
-            script.src = uri;
-            script.onload = resolve;
-            document.head.appendChild(script);
-          } else {
-            nextDefineUri = uri;
-            importScripts(uri);
-            resolve();
-          }
-        })
-      
-      .then(() => {
-        let promise = registry[uri];
-        if (!promise) {
-          throw new Error(`Module ${uri} didn’t register its module`);
-        }
-        return promise;
-      })
-    );
-  };
+- [Node.js](https://nodejs.org/) (LTS version)
+- [Ionic CLI](https://ionicframework.com/docs/cli) (`npm install -g @ionic/cli`)
+- [Electron](https://www.electronjs.org/) (`npm install -g electron`)
+- [Tauri](https://tauri.app/) (`cargo install tauri-cli`)
+- [Vite](https://vitejs.dev/) (Vite is used as the build tool)
 
-  self.define = (depsNames, factory) => {
-    const uri = nextDefineUri || ("document" in self ? document.currentScript.src : "") || location.href;
-    if (registry[uri]) {
-      // Module is already loading or loaded.
-      return;
-    }
-    let exports = {};
-    const require = depUri => singleRequire(depUri, uri);
-    const specialDeps = {
-      module: { uri },
-      exports,
-      require
-    };
-    registry[uri] = Promise.all(depsNames.map(
-      depName => specialDeps[depName] || require(depName)
-    )).then(deps => {
-      factory(...deps);
-      return exports;
-    });
-  };
-}
-define(['./workbox-b5f7729d'], (function (workbox) { 'use strict';
+## Running the Project
+- Running with Vite
+```bash
+npx vite --port=4000
+```
+This will start the Vite development server on http://localhost:4000.
 
-  self.skipWaiting();
-  workbox.clientsClaim();
+- Running with Ionic
+```bash
+ionic serve
+ionic cap run ios   # For iOS
+ionic cap run android  # For Android
 
-  /**
-   * The precacheAndRoute() method efficiently caches and responds to
-   * requests for URLs in the manifest.
-   * See https://goo.gl/S9QRab
-   */
-  workbox.precacheAndRoute([{
-    "url": "registerSW.js",
-    "revision": "3ca0b8505b4bec776b69afdba2768812"
-  }, {
-    "url": "index.html",
-    "revision": "0.dn11atrhkeg"
-  }], {});
-  workbox.cleanupOutdatedCaches();
-  workbox.registerRoute(new workbox.NavigationRoute(workbox.createHandlerBoundToURL("index.html"), {
-    allowlist: [/^\/$/]
-  }));
+```
+- Running with Ionic
+```bash
+npm run electron:start
 
-}));
+```
+
+- Running with Ionic
+```bash
+npm run tauri dev
+```
+
+## Building the Project
+- Building for Production (Web)
+```bash
+npm run build
+```
+
+- Building for Electron (Desktop)
+```bash
+npm run electron:build
+```
+- Building for Tauri (Desktop)
+```bash
+npm run tauri build
+```

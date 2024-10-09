@@ -1,50 +1,52 @@
-# React + TypeScript + Vite
+# Ionic (+Electron, Tauri) app for Cross Platform Development
+This project is a cross-platform application built with **Ionic**, **Electron**, **Tauri**, and **Vite**.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Prerequisites
 
-Currently, two official plugins are available:
+Make sure you have the following tools installed on your machine before proceeding:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- [Node.js](https://nodejs.org/) (LTS version)
+- [Ionic CLI](https://ionicframework.com/docs/cli) (`npm install -g @ionic/cli`)
+- [Electron](https://www.electronjs.org/) (`npm install -g electron`)
+- [Tauri](https://tauri.app/) (`cargo install tauri-cli`)
+- [Vite](https://vitejs.dev/) (Vite is used as the build tool)
 
-## Expanding the ESLint configuration
+## Running the Project
+- Running with Vite
+```bash
+npx vite --port=4000
+```
+This will start the Vite development server on http://localhost:4000.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- Running with Ionic
+```bash
+ionic serve
+ionic cap run ios   # For iOS
+ionic cap run android  # For Android
 
-- Configure the top-level `parserOptions` property like this:
+```
+- Running with Ionic
+```bash
+npm run electron:start
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+- Running with Ionic
+```bash
+npm run tauri dev
+```
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+## Building the Project
+- Building for Production (Web)
+```bash
+npm run build
+```
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+- Building for Electron (Desktop)
+```bash
+npm run electron:build
+```
+- Building for Tauri (Desktop)
+```bash
+npm run tauri build
 ```

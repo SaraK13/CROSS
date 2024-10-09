@@ -25,13 +25,13 @@ ionic cap run ios   # For iOS
 ionic cap run android  # For Android
 
 ```
-- Running with Ionic
+- Running with Electron
 ```bash
 npm run electron:start
 
 ```
 
-- Running with Ionic
+- Running with Tauri
 ```bash
 npm run tauri dev
 ```
